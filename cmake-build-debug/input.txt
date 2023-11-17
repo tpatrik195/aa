@@ -147,7 +147,7 @@ Invalid prufer kodes: 8 3 5 4 6 7 8
 Invalid prufer kodes: 7 1 2 1 7 4 9 4
 Invalid prufer kodes: 2 6 5 3 6 6 11 4
 Invalid prufer kodes: 2 7 3 1 4
-neked is ez? -- igen
+neked is ez? -- nem
 
 
 eddig itt tartok:
