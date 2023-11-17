@@ -6,3 +6,5 @@ a
 helyes pruffer
 
 valami
+
+pruferes-e a feladat neked?
