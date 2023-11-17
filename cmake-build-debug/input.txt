@@ -5,6 +5,142 @@ a
 2 7 8 1 4
 helyes pruffer
 
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <sstream>
+using namespace std;
+
+
+vector<int> splitStringToInts(const string& input) {
+    vector<int> result;
+    istringstream iss(input);
+    int num;
+    while (iss >> num) {
+        result.push_back(num);
+    }
+    return result;
+}
+
+bool isValidPrueferCode(const std::vector<int>& prueferCode, int n) {
+    vector<int> degreeSequence(n + 2, 1);
+
+    for (int edge : prueferCode) {
+        degreeSequence[edge]++;
+    }
+
+    for (int i = 0; i < degreeSequence.size(); ++i) {
+        if (degreeSequence[i] == 1) {
+            for (int j = 0; j < degreeSequence.size(); ++j) {
+                if (degreeSequence[j] == 1 && i != j) {
+                    degreeSequence[i]--;
+                    degreeSequence[j]--;
+                    break;
+                }
+            }
+            if (degreeSequence[i] == 1) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+vector<int> *decode(vector<int> prufer) {
+    int n = prufer.size() +2;
+    vector<int> *newadjList = new vector<int>[n+1];
+    int aktualisPont = 1, voltmar[n+1];
+
+
+    for (int i = 0; i < prufer.size(); ++i) {
+        aktualisPont=1;
+        while (find(prufer.begin() + i, prufer.end(), aktualisPont) != prufer.end() || voltmar[aktualisPont] == 1) { aktualisPont++; }
+
+        voltmar[aktualisPont] = 1;
+        newadjList[prufer[i]].push_back(aktualisPont);
+        newadjList[aktualisPont].push_back(prufer[i]);
+
+    }
+    newadjList[prufer.back()].push_back(n);
+    newadjList[n].push_back(prufer.back());
+
+
+    return newadjList;
+}
+
+string vectorToPrufer(const vector<int>& pruferCode) {
+    stringstream ss;
+    ss << "Prufer";
+    for (size_t i = 0; i < pruferCode.size(); ++i) {
+        ss << pruferCode[i];
+        if (i != pruferCode.size() - 1) {
+            ss << "-";
+        }
+    }
+
+    ss << ".txt";
+    return ss.str();
+}
+
+
+
+int main() {
+    ifstream input_file("prufer.txt");
+    if (!input_file.is_open()) {
+        cerr << "Hiba: A fajl nem nyithato meg!" << endl;
+        return 1;
+    }
+
+    vector<vector<int>> prufers;
+
+    string line;
+    while (getline(input_file, line)) {
+        vector<int> row = splitStringToInts(line);
+        prufers.push_back(row);
+    }
+
+    input_file.close();
+
+//    cout << "Prufers:\n";
+//    for (const auto& row : prufers) {
+//        for (int num : row) {
+//            cout << num << " ";
+//        }
+//        cout << endl;
+//    }
+//    cout << "----" << endl;
+    for (const auto& row : prufers) {
+        if (isValidPrueferCode(row,row.size())){
+            vector<int> pruferCode = row;
+            vector<int>* adjacencyList = decode(pruferCode);
+
+            ofstream output_file (vectorToPrufer(row));
+            for (int i = 1; i <= pruferCode.size() + 2; ++i) {
+                output_file << i << ": ";
+                for (int neighbor : adjacencyList[i]) {
+                    output_file << neighbor << " ";
+                }
+                output_file << endl;
+            }
+
+            delete[] adjacencyList;
+            output_file.close();
+        } else{
+            cout << "Invalid";
+            for (const auto &a : row) {
+                cout << a << " ";
+            }
+            cout << endl;
+        }
+
+    }
+
+    return 0;
+}
+
+
+
 valami
 
 pruferes-e a feladat neked?
