@@ -287,3 +287,7 @@ int main() {
 
     return 0;
 }
+
+
+nekem 3 invalid es 5 valid
+Botiet leellenoriztem s minden el nem jo :(
