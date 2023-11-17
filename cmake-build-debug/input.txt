@@ -147,9 +147,143 @@ Invalid prufer kodes: 8 3 5 4 6 7 8
 Invalid prufer kodes: 7 1 2 1 7 4 9 4
 Invalid prufer kodes: 2 6 5 3 6 6 11 4
 Invalid prufer kodes: 2 7 3 1 4
-neked is ez?
+neked is ez? -- igen
 
 
-valami
+eddig itt tartok:
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <sstream>
 
-pruferes-e a feladat neked?
+using namespace std;
+
+void readPrufers(vector<vector<int>> &pruferCodes) {
+    ifstream fin("pruferek.txt");
+    if (!fin) throw "nem sikerult a fajlmegnyitas";
+    while (!fin.eof()) {
+        string line;
+        getline(fin, line);
+        istringstream iss(line);
+        int num;
+        vector<int> integers;
+        while (iss >> num) {
+            integers.push_back(num);
+        }
+        pruferCodes.push_back(integers);
+    }
+    fin.close();
+}
+
+bool isValidSeq(const vector<int> &seq) {
+    int n = seq.size();
+    int nodes = n + 2;
+
+    // Iterate in the Prufer sequence
+    for (int i = 0; i < n; i++) {
+
+        // If out of range
+        if (seq[i] < 1 || seq[i] > nodes)
+            return false;
+    }
+
+    return true;
+}
+
+void edgeListByPrufer(vector<int> prufer) {
+    bool valid = false;
+    ofstream fout;
+    if (isValidSeq(prufer)) {
+        valid = true;
+
+        //cout << "valid" << endl;
+
+        string fileName = "";
+        stringstream ss;
+        for (size_t i = 0; i < prufer.size(); ++i) {
+            ss << prufer[i];
+            if (i < prufer.size() - 1) {
+                ss << "-";
+            }
+        }
+        fileName = ss.str();
+        fileName += ".txt";
+
+        fout.open(fileName);
+
+        // fout nodes and edges(nodes = prufer size + 2; edges = prufer size)
+        fout << prufer.size() + 2 << " " << prufer.size() << endl;
+    } else {
+        cout << "not valid prufer code" << endl << "nodes: " << prufer.size() + 2 << " edges: " << prufer.size()
+             << endl;
+    }
+
+    int vertices = prufer.size() + 2;
+    int vertex_set[vertices];
+
+    // Initialize the array of vertices
+    for (int i = 0; i < vertices; i++)
+        vertex_set[i] = 0;
+
+    // Number of occurrences of vertex in code
+    for (int i = 0; i < vertices - 2; i++)
+        vertex_set[prufer[i] - 1] += 1;
+
+    // Find the smallest label not present in prufer[].
+    int j = 0;
+    for (int i = 0; i < vertices - 2; i++) {
+        for (j = 0; j < vertices; j++) {
+            // If j+1 is not present in prufer set
+            if (vertex_set[j] == 0) {
+                // Remove from Prufer set and print
+                // pair.
+                vertex_set[j] = -1;
+
+                if (valid) fout << (j + 1) << " " << prufer[i] << endl;
+                else cout << "(" << (j + 1) << ", " << prufer[i] << ")  ";
+
+
+                vertex_set[prufer[i] - 1]--;
+
+                break;
+            }
+        }
+    }
+
+//    j = 0;
+//    // For the last element
+//    for (int i = 0; i < vertices; i++) {
+//        if (vertex_set[i] == 0 && j == 0) {
+//            if (valid) fout << (j + 1) << " ";
+//            else cout << "(" << (i + 1) << ", ";
+//            j++;
+//        } else if (vertex_set[i] == 0 && j == 1) {
+//            if (valid) fout << (i + 1) << endl;
+//            else cout << (i + 1) << ")" << endl << endl;
+//        }
+//    }
+    cout << endl;
+    fout.close();
+}
+
+void verifyPrufers(vector<vector<int>> pruferCodes) {
+    for (int i = 0; i < pruferCodes.size(); i++) {
+        edgeListByPrufer(pruferCodes[i]);
+    }
+}
+
+int main() {
+    vector<vector<int>> pruferCodes;
+    readPrufers(pruferCodes);
+
+//    for (int i = 0; i < pruferCodes.size(); i++) {
+//        for (int j = 0; j < pruferCodes[i].size(); j++) {
+//            cout << pruferCodes[i][j] << " ";
+//        }
+//        cout << endl;
+//    }
+
+    verifyPrufers(pruferCodes);
+
+    return 0;
+}
