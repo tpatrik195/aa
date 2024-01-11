@@ -491,3 +491,69 @@ int main(int argc, char **argv) {
     return 0;
 }
  ezzel az jon ki miint SZabinak
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A legnagyobb osszefuggo resz merete a 8 szamu csomopont eltavolitasa utan: 47
+// Egy módosított DFS függvény, ami meghatározza az összefüggő rész méretét
+// egy adott csomópont eltávolítása után
+int modifiedDFS(vector<int> adj[], vector<int>& vis, int curr, int removedNode) {
+    if (curr == removedNode) return 0; // Ha az aktuális csomópont az eltávolítandó, ne vizsgáljuk
+
+    vis[curr] = 1;
+    int size = 1;
+    for (auto x : adj[curr]) {
+        if (!vis[x] && x != removedNode) {
+            size += modifiedDFS(adj, vis, x, removedNode);
+        }
+    }
+    return size;
+}
+
+// Függvény, amely meghatározza a legnagyobb összefüggő rész méretét
+// egy adott csomópont eltávolítása után
+void largestComponentAfterRemoval(vector<int> adj[], int V, int removedNode) {
+    vector<int> vis(V + 1, 0);
+    int largestComponentSize = 0;
+
+    for (int i = 1; i <= V; i++) {
+        if (i != removedNode && !vis[i]) {
+            int componentSize = modifiedDFS(adj, vis, i, removedNode);
+            largestComponentSize = max(largestComponentSize, componentSize);
+        }
+    }
+
+    cout << "A legnagyobb osszefuggo resz merete a(z) " << removedNode << " szamu csomopont eltavolitasa utan: " << largestComponentSize << endl;
+}
