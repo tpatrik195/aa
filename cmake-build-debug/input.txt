@@ -405,3 +405,5 @@ elvago pontok
 igen, nekem is ez jott ki
 
 A legtobb reszre bomlaszt: 8 szamu csomopont, reszek szama: 4
+
+igen, nekem is ez jott ki, de a kep alapjan nem 3 reszre osztja?
