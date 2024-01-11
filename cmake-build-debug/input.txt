@@ -397,7 +397,11 @@ elvago pontok
 48
 50
 52
---------?
+
+53
+56 geeks.geeks meg ezt a kettot is adja
 
 
 igen, nekem is ez jott ki
+
+A legtobb reszre bomlaszt: 8 szamu csomopont, reszek szama: 4
