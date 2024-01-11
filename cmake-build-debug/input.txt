@@ -409,3 +409,85 @@ A legtobb reszre bomlaszt: 8 szamu csomopont, reszek szama: 4
 igen, nekem is ez jott ki, de a kep alapjan nem 3 reszre osztja? - nem tudom ha igen akkor -1
 
 A legnagyobb osszefuggo resz: 56, amikor eltavolitjuk a 1 szamu csomopontot. ez nem helyes megoldas mi?
+
+#include <iostream>
+#include <vector>
+#include <fstream>
+
+using namespace std;
+
+void dfs(vector<int> adj[], int V, vector<int> &vis,
+         int i, int curr) {
+    vis[curr] = 1;
+    for (auto x: adj[curr]) {
+        if (x != i) {
+            if (!vis[x]) {
+                dfs(adj, V, vis, i, x);
+            }
+        }
+    }
+}
+
+void AP(vector<int> adj[], int V) {
+    int maxComponents = 0;
+    int criticalNode = 0;
+    vector<int> articulationPoints;
+
+    for (int i = 1; i <= V; i++) {
+        vector<int> vis(V + 1, 0);
+        int components = 0;
+
+        for (int j = 1; j <= V; j++) {
+            if (j != i && !vis[j]) {
+                components++;
+                dfs(adj, V, vis, i, j);
+            }
+        }
+
+        if (components > maxComponents) {
+            maxComponents = components;
+            criticalNode = i;
+        }
+
+        if (components > 1) {
+            articulationPoints.push_back(i);
+        }
+    }
+
+    cout << "Torolt csucs: " << criticalNode << ", " << maxComponents << " reszre bomlott a halozat" << endl;
+
+    ofstream fout("kimenet1.txt");
+    for (int ap: articulationPoints) {
+        fout << ap << endl;
+    }
+
+//    cout << "artikulacios pontok: ";
+//    for (int ap : articulationPoints) {
+//        cout << ap << " ";
+//    }
+//    cout << endl;
+}
+
+void addEdge(vector<int> adj[], int u, int v) {
+    adj[u].push_back(v);
+    adj[v].push_back(u);
+}
+
+int main(int argc, char **argv) {
+    int nodes, edges;
+    fstream fin(argv[1]);
+    fin >> nodes >> edges;
+    int V = nodes;
+    vector<int> adj1[V + 1];
+    int u, v;
+
+    for (int i = 0; i < edges; i++) {
+        fin >> u >> v;
+        addEdge(adj1, u, v);
+    }
+
+    AP(adj1, V);
+
+    return 0;
+}
+ ezzel az jon ki miint SZabinak
