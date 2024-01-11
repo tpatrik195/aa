@@ -400,10 +400,12 @@ elvago pontok
 
 53
 56 geeks.geeks meg ezt a kettot is adja
-
+botieval geekessel is ezt adja csak jo
 
 igen, nekem is ez jott ki
 
 A legtobb reszre bomlaszt: 8 szamu csomopont, reszek szama: 4
 
-igen, nekem is ez jott ki, de a kep alapjan nem 3 reszre osztja?
+igen, nekem is ez jott ki, de a kep alapjan nem 3 reszre osztja? - nem tudom ha igen akkor -1
+
+A legnagyobb osszefuggo resz: 56, amikor eltavolitjuk a 1 szamu csomopontot. ez nem helyes megoldas mi?
